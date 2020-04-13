@@ -1,0 +1,259 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+
+/* Vuetify and material design */
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons');
+@import url('https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css');
+
+:root {
+  --white: #fff;
+  --turquoise: #03dac4;
+  --placeholder: #888;
+  --deep-blue: #2C3E50;
+  --warning: #f1735c;
+}
+
+/** CSS RESET **/
+
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+html {
+  overflow-y: auto;
+  position: relative;
+}
+
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote::before,
+blockquote::after,
+q::before,
+q::after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/**
+SPACING HELPERS
+**/
+
+$spaceamounts: (2, 5, 10, 15, 20, 25, 30);
+$sides: (top, bottom, left, right);
+
+@each $space in $spaceamounts {
+  .p-#{$space} {
+    padding: #{$space}px !important;
+  }
+  .m-#{$space} {
+    margin: #{$space}px !important;
+  }
+  @each $side in $sides {
+    .m#{str-slice($side, 0, 1)}-#{$space} {
+      margin-#{$side}: #{$space}px !important;
+    }
+
+    .p#{str-slice($side, 0, 1)}-#{$space} {
+      padding-#{$side}: #{$space}px !important;
+    }
+  }
+}
+
+/**
+GLOBAL STYLES
+**/
+
+/* eslint no-duplicate-selectors: false */
+body {
+  position: relative;
+  background-color: #F8F9FA;
+  color: var(--deep-blue);
+  height: 100vh;
+  font-family: Arial, Helvetica, Helvetica Neue, serif;
+  margin: 0;
+}
+
+/* eslint no-duplicate-selectors: true */
+
+body.dark {
+  background-color: var(--deep-blue);
+  color: #F8F9FA;
+}
+
+h1 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+h2 {
+  margin: 0;
+  font-size: 2.25rem;
+  font-weight: bold;
+  letter-spacing: -0.025em;
+  color: #444;
+}
+
+p {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover,a:active, a:visited {
+  text-decoration: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+hr {
+  height: 1px;
+  margin-bottom: 25px;
+  opacity: 0.12;
+  background-color: rgba(0, 0, 0, 0.87);
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.hover-turquoise {
+  transition: color 0.4s;
+
+  &:hover {
+    color: var(--turquoise);
+  }
+}

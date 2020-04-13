@@ -1,4 +1,4 @@
-# 0.1.0 (2020.04.12)
+# 0.1.0 (2020.04.13)
 
 #### Features
-- First commit of timer
+- Hours:minutes:seconds timer

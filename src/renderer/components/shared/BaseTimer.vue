@@ -26,13 +26,74 @@
       </g>
     </svg>
     <span class="base-timer__label">{{ formattedTimeLeft }}</span>
+    <v-container class="mt-5">
+      <v-row justify="center">
+        <v-col
+          cols="3"
+          sm="1"
+          md="4"
+        >
+          <v-text-field
+            v-model="timeHours"
+            label="hours"
+            outlined
+            type="number"
+          />
+        </v-col>
+        <v-col
+          cols="3"
+          sm="1"
+          md="4"
+        >
+          <v-text-field
+            v-model="timeMinutes"
+            label="minutes"
+            outlined
+            type="number"
+          />
+        </v-col>
+        <v-col
+          cols="3"
+          sm="1"
+          md="4"
+        >
+          <v-text-field
+            v-model="timeSeconds"
+            label="seconds"
+            outlined
+            type="number"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+    <div>
+      <v-btn
+        class="mr-5"
+        @click="startTimer"
+      >
+        Start
+      </v-btn>
+      <v-btn
+        v-if="paused"
+        @click="continueTimer"
+      >
+        Continue
+      </v-btn>
+      <v-btn
+        v-else
+        @click="pauseTimer"
+      >
+        Pause
+      </v-btn>
+    </div>
   </div>
 </template>
 
 <script>
-const FULL_DASH_ARRAY = 283
-const WARNING_THRESHOLD = 10
 const ALERT_THRESHOLD = 5
+const FULL_DASH_ARRAY = 283
+const HOUR = 3600
+const WARNING_THRESHOLD = 10
 
 const COLOR_CODES = {
   info: {
@@ -48,13 +109,16 @@ const COLOR_CODES = {
   },
 }
 
-const TIME_LIMIT = 20
-
 export default {
   name: 'BaseTimer',
   data() {
     return {
+      paused: false,
+      timeHours: 0,
+      timeLimit: 20, // seconds
+      timeMinutes: 0,
       timePassed: 0,
+      timeSeconds: 0,
       timerInterval: null,
     }
   },
@@ -63,28 +127,23 @@ export default {
     circleDasharray() {
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`
     },
-
     formattedTimeLeft() {
-      const timeLeft = this.timeLeft
-      const minutes = Math.floor(timeLeft / 60)
-      let seconds = timeLeft % 60
-
-      if (seconds < 10) {
-        seconds = `0${seconds}`
-      }
-
-      return `${minutes}:${seconds}`
+      let pad = function(num, size) {
+          return ('000' + num).slice(size * -1)
+        },
+        time = parseFloat(this.timeLeft).toFixed(3),
+        hours = Math.floor(time / 60 / 60),
+        minutes = Math.floor(time / 60) % 60,
+        seconds = Math.floor(time - minutes * 60)
+      return `${pad(hours, 2)}:${pad(minutes, 2)}:${pad(seconds, 2)}`
     },
-
     timeLeft() {
-      return TIME_LIMIT - this.timePassed
+      return this.timeLimit - this.timePassed
     },
-
     timeFraction() {
-      const rawTimeFraction = this.timeLeft / TIME_LIMIT
-      return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction)
+      const rawTimeFraction = this.timeLeft / this.timeLimit
+      return rawTimeFraction - (1 / this.timeLimit) * (1 - rawTimeFraction)
     },
-
     remainingPathColor() {
       const { alert, warning, info } = COLOR_CODES
 
@@ -106,17 +165,43 @@ export default {
     },
   },
 
-  mounted() {
-    this.startTimer()
-  },
-
   methods: {
+    continueTimer() {
+      this.paused = false
+      this.start()
+    },
+    setTimeLimit() {
+      let seconds = parseInt(this.timeSeconds, 10)
+      if (this.timeHours > 0) {
+        seconds += this.timeHours * HOUR
+      }
+      if (this.timeMinutes > 0) {
+        seconds += this.timeMinutes * 60
+      }
+      if (seconds > 0) {
+        this.timeLimit = seconds
+        return
+      }
+      this.timeLimit = 20
+    },
     onTimesUp() {
       clearInterval(this.timerInterval)
     },
-
-    startTimer() {
+    pauseTimer() {
+      this.paused = true
+      this.timerInterval = clearInterval(this.timerInterval)
+    },
+    start() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000)
+    },
+    startTimer() {
+      this.setTimeLimit()
+      this.paused = false
+      if (this.timerInterval !== 0) {
+        clearInterval(this.timerInterval)
+      }
+      this.timePassed = 0
+      this.start()
     },
   },
 }

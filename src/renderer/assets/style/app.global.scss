@@ -257,3 +257,8 @@ hr {
     color: var(--turquoise);
   }
 }
+
+/** App **/
+.v-application--wrap {
+  min-height: 0;
+}

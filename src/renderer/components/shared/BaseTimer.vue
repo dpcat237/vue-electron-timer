@@ -163,9 +163,27 @@ export default {
         this.onTimesUp()
       }
     },
+    timePassed(newValue) {
+      if (newValue !== 0 && this.timeLeft > 0) {
+        this.saveTime()
+      }
+    },
+  },
+
+  mounted() {
+    this.restoreTime()
   },
 
   methods: {
+    saveTime() {
+      if (this.timePassed > 0) {
+        let data = {
+          timeLimit: this.timeLimit,
+          timePast: this.timePassed,
+        }
+        this.$store.dispatch('saveTime', data)
+      }
+    },
     continueTimer() {
       this.paused = false
       this.start()
@@ -191,6 +209,15 @@ export default {
       this.paused = true
       this.timerInterval = clearInterval(this.timerInterval)
     },
+    restoreTime() {
+      let timeLimit = this.$store.getters.time.timeLimit
+      let timePast = this.$store.getters.time.timePast
+      if (timeLimit > 0) {
+        this.timeLimit = timeLimit
+        this.timePassed = timePast
+        this.paused = true
+      }
+    },
     start() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000)
     },
@@ -201,6 +228,7 @@ export default {
         clearInterval(this.timerInterval)
       }
       this.timePassed = 0
+      this.$store.dispatch('cleanTime')
       this.start()
     },
   },

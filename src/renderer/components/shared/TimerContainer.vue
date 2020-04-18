@@ -16,6 +16,8 @@
 import TimerClock from './TimerClock'
 import TimerControls from './TimerControls'
 
+const HOUR = 3600
+
 export default {
   name: 'TimerContainer',
   components: {
@@ -25,11 +27,8 @@ export default {
   data() {
     return {
       paused: false,
-      timeHours: 0,
-      timeLimit: 20, // seconds
-      timeMinutes: 0,
+      timeLimit: 0,
       timePassed: 0,
-      timeSeconds: 0,
       timerInterval: null,
     }
   },
@@ -52,7 +51,6 @@ export default {
   },
   mounted() {
     this.restoreTime()
-    this.keyListener()
   },
   methods: {
     saveTime() {
@@ -67,23 +65,6 @@ export default {
     resumeTimer() {
       this.paused = false
       this.start()
-    },
-    keyListener() {
-      let $el = this
-      window.addEventListener('keypress', function(e) {
-        // Space
-        if (e.keyCode === 32) {
-          if ($el.paused) {
-            $el.resumeTimer()
-          } else {
-            $el.pauseTimer()
-          }
-        }
-        // Enter
-        if (e.keyCode === 13) {
-          $el.startTimer()
-        }
-      })
     },
     onTimesUp() {
       clearInterval(this.timerInterval)
@@ -101,16 +82,16 @@ export default {
         this.paused = true
       }
     },
-    setTimeLimit() {
-      let seconds = parseInt(this.timeSeconds, 10)
-      if (this.timeHours > 0) {
-        seconds += this.timeHours * HOUR
+    setTimeLimit(hours, minutes, seconds) {
+      let secTotal = parseInt(seconds, 10)
+      if (hours > 0) {
+        secTotal += hours * HOUR
       }
-      if (this.timeMinutes > 0) {
-        seconds += this.timeMinutes * 60
+      if (minutes > 0) {
+        secTotal += minutes * 60
       }
-      if (seconds > 0) {
-        this.timeLimit = seconds
+      if (secTotal > 0) {
+        this.timeLimit = secTotal
         return
       }
       this.timeLimit = 20
@@ -118,8 +99,8 @@ export default {
     start() {
       this.timerInterval = setInterval(() => (this.timePassed += 1), 1000)
     },
-    startTimer() {
-      this.setTimeLimit()
+    startTimer(data) {
+      this.setTimeLimit(data.hours, data.minutes, data.seconds)
       this.paused = false
       if (this.timerInterval !== 0) {
         clearInterval(this.timerInterval)

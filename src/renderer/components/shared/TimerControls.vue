@@ -80,7 +80,27 @@ export default {
       timerInterval: null,
     }
   },
+  mounted() {
+    this.keyListener()
+  },
   methods: {
+    keyListener() {
+      let $el = this
+      window.addEventListener('keypress', function(e) {
+        // Space
+        if (e.keyCode === 32) {
+          if ($el.paused) {
+            $el.resumeTimer()
+          } else {
+            $el.pauseTimer()
+          }
+        }
+        // Enter
+        if (e.keyCode === 13) {
+          $el.startTimer()
+        }
+      })
+    },
     pauseTimer() {
       this.$emit('pauseTimer')
     },
@@ -91,7 +111,25 @@ export default {
       e.target.select()
     },
     startTimer() {
-      this.$emit('startTimer')
+      let data = {
+        hours:
+          typeof this.timeHours !== 'undefined' && this.timeHours !== null && this.timeHours !== ''
+            ? this.timeHours
+            : 0,
+        minutes:
+          typeof this.timeMinutes !== 'undefined' &&
+          this.timeMinutes !== null &&
+          this.timeMinutes !== ''
+            ? this.timeMinutes
+            : 0,
+        seconds:
+          typeof this.timeSeconds !== 'undefined' &&
+          this.timeSeconds !== null &&
+          this.timeSeconds !== ''
+            ? this.timeSeconds
+            : 0,
+      }
+      this.$emit('startTimer', data)
     },
   },
 }

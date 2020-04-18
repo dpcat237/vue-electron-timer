@@ -30,10 +30,9 @@
 </template>
 
 <script>
-const ALERT_THRESHOLD = 5
+const ALERT_THRESHOLD = 10
 const FULL_DASH_ARRAY = 283
-const HOUR = 3600
-const WARNING_THRESHOLD = 10
+const WARNING_THRESHOLD = 25
 
 const COLOR_CODES = {
   info: {
@@ -61,6 +60,13 @@ export default {
       default: 20, // seconds
     },
   },
+  data() {
+    return {
+      fivePast: false,
+      quartPast: false,
+      percentage: 100,
+    }
+  },
   computed: {
     circleDasharray() {
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`
@@ -81,14 +87,23 @@ export default {
     },
     remainingPathColor() {
       const { alert, warning, info } = COLOR_CODES
-
-      if (this.timeLeft <= alert.threshold) {
+      if (this.percentage <= alert.threshold) {
         return alert.color
-      } else if (this.timeLeft <= warning.threshold) {
+      } else if (this.percentage <= warning.threshold) {
         return warning.color
       } else {
         return info.color
       }
+    },
+  },
+  watch: {
+    timeLeft(newValue) {
+      this.percentage = (newValue / this.timeLimit) * 100
+    },
+    timeLimit() {
+      this.fivePast = false
+      this.quartPast = false
+      this.percentage = 100
     },
   },
 }

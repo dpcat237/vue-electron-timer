@@ -6,6 +6,7 @@
 - Split clock and controls to components
 - Improve interactions with input fields
 - Add icon
+- Count warning and alert color in %
 
 # 0.1.0 (2020.04.13)
 

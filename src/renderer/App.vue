@@ -3,17 +3,17 @@
     id="toolkit"
     class="v-application container-fluid"
   >
-    <app-timer />
+    <app-timer-container />
   </v-app>
 </template>
 
 <script>
-import BaseTimer from './components/shared/BaseTimer'
+import TimerContainer from './components/shared/TimerContainer'
 
 export default {
   name: 'App',
   components: {
-    'app-timer': BaseTimer,
+    'app-timer-container': TimerContainer,
   },
 }
 </script>

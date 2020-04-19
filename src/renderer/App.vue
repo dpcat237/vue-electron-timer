@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import TimerContainer from './components/shared/TimerContainer'
+import TimerContainer from './components/TimerContainer'
 
 export default {
   name: 'App',

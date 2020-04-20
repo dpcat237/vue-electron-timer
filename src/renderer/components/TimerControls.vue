@@ -134,6 +134,7 @@ export default {
             ? this.timeSeconds
             : 0,
       }
+      this.paused = false
       this.$emit('startTimer', data)
     },
   },

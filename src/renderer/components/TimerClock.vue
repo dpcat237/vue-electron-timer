@@ -30,10 +30,13 @@
 </template>
 
 <script>
+const { remote } = require('electron')
+const self = remote.getCurrentWindow()
+
 const ALERT_THRESHOLD = 10
 const FULL_DASH_ARRAY = 283
+const HALF_THRESHOLD = 50
 const WARNING_THRESHOLD = 25
-
 const COLOR_CODES = {
   info: {
     color: 'green',
@@ -64,6 +67,10 @@ export default {
     return {
       fivePast: false,
       quartPast: false,
+      notifiedHalf: false,
+      notifiedWarning: false,
+      notifiedAlert: false,
+      notifiedFinished: false,
       percentage: 100,
     }
   },
@@ -87,6 +94,7 @@ export default {
     },
     remainingPathColor() {
       const { alert, warning, info } = COLOR_CODES
+      this.checkForNotification()
       if (this.percentage <= alert.threshold) {
         return alert.color
       } else if (this.percentage <= warning.threshold) {
@@ -104,6 +112,42 @@ export default {
       this.fivePast = false
       this.quartPast = false
       this.percentage = 100
+      this.cleanNotifications()
+    },
+  },
+  methods: {
+    checkForNotification() {
+      if (this.percentage < HALF_THRESHOLD && !this.notifiedHalf) {
+        this.displayNotification('Is left half of the time: ' + this.formattedTimeLeft)
+        this.notifiedHalf = true
+      }
+      if (this.percentage < WARNING_THRESHOLD && !this.notifiedWarning) {
+        this.displayNotification('Left of the time: ' + this.formattedTimeLeft)
+        this.notifiedWarning = true
+      }
+      if (this.percentage < ALERT_THRESHOLD && !this.notifiedAlert) {
+        this.displayNotification('Is left only: ' + this.formattedTimeLeft)
+        this.notifiedAlert = true
+      }
+      if (this.percentage === 0 && !this.notifiedFinished) {
+        this.displayNotification('Time finished!')
+        this.notifiedFinished = true
+      }
+    },
+    cleanNotifications() {
+      this.notifiedHalf = false
+      this.notifiedWarning = false
+      this.notifiedAlert = false
+      this.notifiedFinished = false
+    },
+    displayNotification(txt) {
+      let notification = new Notification('Timer', { body: txt })
+
+      notification.onclick = e => {
+        if (!self.isVisible()) {
+          self.show()
+        }
+      }
     },
   },
 }

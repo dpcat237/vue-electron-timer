@@ -46,18 +46,21 @@
     <div>
       <v-btn
         class="mr-5"
+        color="success"
         @click="startTimer"
       >
         Start
       </v-btn>
       <v-btn
         v-if="paused"
+        color="primary"
         @click="resumeTimer"
       >
         Resume
       </v-btn>
       <v-btn
         v-else
+        color="secondary"
         @click="pauseTimer"
       >
         Pause
@@ -71,7 +74,7 @@ export default {
   name: 'TimerControls',
   data() {
     return {
-      paused: false,
+      paused: true,
       timeHours: null,
       timeLimit: 20, // seconds
       timeMinutes: null,
@@ -102,9 +105,11 @@ export default {
       })
     },
     pauseTimer() {
+      this.paused = true
       this.$emit('pauseTimer')
     },
     resumeTimer() {
+      this.paused = false
       this.$emit('resumeTimer')
     },
     selectText(e) {

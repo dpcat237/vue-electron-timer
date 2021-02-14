@@ -7,9 +7,7 @@ import MenuBuilder from './menu'
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path')
-    .join(__dirname, '/static')
-    .replace(/\\/g, '\\\\')
+  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
 let mainWindow
@@ -43,6 +41,7 @@ function createWindow() {
     minHeight: 600,
     resizable: true,
     useContentSize: true,
+    enableRemoteModule: true,
     webPreferences: {
       nodeIntegration: true,
     },

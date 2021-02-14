@@ -79,7 +79,7 @@ export default {
       return `${(this.timeFraction * FULL_DASH_ARRAY).toFixed(0)} 283`
     },
     formattedTimeLeft() {
-      let pad = function(num, size) {
+      let pad = function (num, size) {
           return ('000' + num).slice(size * -1)
         },
         time = this.timeLeft.toFixed(3),
@@ -143,7 +143,7 @@ export default {
     displayNotification(txt) {
       let notification = new Notification('Timer', { body: txt })
 
-      notification.onclick = e => {
+      notification.onclick = (e) => {
         if (!self.isVisible()) {
           self.show()
         }

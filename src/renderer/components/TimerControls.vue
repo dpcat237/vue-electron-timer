@@ -89,7 +89,7 @@ export default {
   methods: {
     keyListener() {
       let $el = this
-      window.addEventListener('keypress', function(e) {
+      window.addEventListener('keypress', function (e) {
         // Space
         if (e.keyCode === 32) {
           if ($el.paused) {

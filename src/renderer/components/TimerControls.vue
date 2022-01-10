@@ -87,6 +87,11 @@ export default {
     this.keyListener()
   },
   methods: {
+    cleanData() {
+      this.timeHours = 0
+      this.timeMinutes = 0
+      this.timeSeconds = 0
+    },
     keyListener() {
       let $el = this
       window.addEventListener('keypress', function (e) {
@@ -134,8 +139,13 @@ export default {
             ? this.timeSeconds
             : 0,
       }
+      if (data.hours === 0 && data.minutes === 0 && data.seconds === 0) {
+        return
+      }
+
       this.paused = false
       this.$emit('startTimer', data)
+      this.cleanData()
     },
   },
 }
